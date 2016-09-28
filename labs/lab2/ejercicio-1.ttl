@@ -1,0 +1,96 @@
+@base <http://molguin92.github.io/foaf/lab2-1.ttl> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix dcc: <http://users.dcc.uchile.cl/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix wikidata: <http://www.wikidata.org/entity/> .
+@prefix ex: <http://molguin92.github.io/foaf/lab2-1.ttl#> .
+
+ex:GabrielaMistral  ex:pseudonym "Gabriela Mistral"@es ;
+                    ex:name "Lucila de María del Perpetuo Socorro Godoy Alcayaga"@es ;
+                    rdf:type ex:Poet , ex:Teacher, ex:Person ;
+                    ex:nationality ex:Chile ;
+                    ex:father ex:JuanJeronimoGV ;
+                    ex:mother ex:PetronilaAR ;
+                    ex:dob "1889-04-07"^^xsd:date ;
+                    ex:bornIn ex:Vicuna ;
+                    ex:awards ex:NobelPrizeLit45 ;
+                    ex:dod "1957-01-10"^^xsd:date ;
+                    ex:cod ex:PancreaticCancer ;
+                    ex:aod 67 ;
+                    ex:diedIn ex:HempsteadHosp ;
+                    ex:works ( ex:Desolacion ) .
+
+ex:Desolacion       rdf:type ex:Book ;
+                    ex:editions ( ex:DesolacionORIG ex:DesolacionCL ) .
+
+ex:DesolacionORIG   rdf:type ex:Book ;
+                    ex:pubYear "1922"^^xsd:gYear ;
+                    ex:pubLoc ex:NewYork ;
+                    ex:publisher ex:InstEsp ;
+                    ex:sections ( ex:SecVida ex:SecEscuela ex:SecInfantiles ex:SecDolor ex:SecNaturaleza ) .
+
+ex:DesolacionCL     rdf:type ex:Book ;
+                    ex:sections ( ex:SecVida ex:SecEscuela ex:SecInfantiles ex:SecDolor ex:SecNaturaleza ex:SecProsa ex:SecProsEsc ) .
+
+ex:SecVida          rdf:type ex:Section ;
+                    ex:name "Vida"@es .
+
+ex:SecEscuela       rdf:type ex:Section ;
+                    ex:name "Escuela"@es .
+
+ex:SecInfantiles    rdf:type ex:Section ;
+                    ex:name "Infantiles"@es .
+
+ex:SecDolor         rdf:type ex:Section ;
+                    ex:name "Dolor"@es .
+
+ex:SecNaturaleza    rdf:type ex:Section ;
+                    ex:name "Naturaleza"@es .
+
+ex:SecProsa         rdf:type ex:Section ;
+                    ex:name "Prosa"@es .
+
+ex:SecProsEsc       rdf:type ex:Section ;
+                    ex:name "Prosas Escolares y Cuentos"@es .
+
+
+ex:InstEsp          ex:name "Instituto de las Españas"@es ;
+                    rdf:type ex:Publisher ;
+                    ex:director ex:FedericoOnis .
+
+ex:FedericoOnis     ex:name "Federico de Onís"@es ;
+                    rdf:type ex:Person .
+
+ex:GBMuseum         ex:name "Gabriela Mistral"@es ;
+                    rdf:type ex:Museum ;
+                    ex:location ex:Vicuña ;
+                    ex:dedicatedTo ex:GabrielaMistral .
+
+ex:Vicuna           ex:name "Vicuña"@ex ;
+                    rdf:type ex:City ;
+                    ex:region ex:Coquimbo .
+
+ex:Coquimbo         ex:name "Región de Coquimbo"@es ;
+                    rdf:type ex:Region .
+
+ex:JuanJeronimoGV   ex:name "Juan Jerónimo Godoy Villanueva"@es ;
+                    rdf:type ex:Person , ex:Teacher .
+
+ex:PetronilaAR      ex:name "Petronila Alcayaga Rojas"@es ;
+                    rdf:type ex:Person .
+
+ex:NobelPrizeLit45  rdf:type ex:NobelPrizeLit ;
+                    ex:year "1945"^^xsd:gYear .
+
+ex:PancreaticCancer ex:name "Pancreatic Cancer"@en ;
+                    ex:name "Cáncer al Páncreas"@es ;
+                    rdf:type ex:Disease .
+
+ex:HempsteadHosp    ex:name "Hempstead Hospital"@en ;
+                    rdf:type ex:Hospital ;
+                    ex:located ex:NewYork .
+
+ex:NewYork          ex:name "New York"@en ;
+                    rdf:type ex:City .

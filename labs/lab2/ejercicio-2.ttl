@@ -1,0 +1,58 @@
+@base <http://molguin92.github.io/foaf/lab2-1.ttl> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix dcc: <http://users.dcc.uchile.cl/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix wikidata: <http://www.wikidata.org/entity/> .
+@prefix ex: <http://molguin92.github.io/foaf/lab2-1.ttl#> .
+
+ex:Surinam          ex:name "República del Surinam"@es ;
+                    ex:name "Republiek van Suriname"@nl ;
+                    ex:oldname "Guayana Holandesa"@es ;
+                    ex:oldname "Guayana Neerlandesa"@es ;
+                    rdf:type ex:Country ;
+                    ex:location ex:SouthAmerica ;
+                    ex:borderNorth ex:AtlanticOcean ;
+                    ex:borderEast ex:FrenchGuiana ;
+                    ex:borderWest ex:Guyana ;
+                    ex:borderSouth ex:Brazil ;
+                    ex:areakm2 163270 ;
+                    ex:population [ ex:value 551000 ; ex:year "2014"^^xsd:gYear ; ex:dataOrigin ex:UN ] ;
+                    ex:capital ex:Paramarimbo ;
+                    ex:language ex:NL .
+
+ex:SouthAmerica     rdf:type ex:Continent ;
+                    ex:name "South America"@en ;
+                    ex:name "América del Sur"@es ;
+                    ex:name "Sudamérica"@es .
+
+ex:AtlanticOcean    rdf:type ex:Ocean ;
+                    ex:name "Atlantic Ocean"@en ;
+                    ex:name "Océano Atlántico"@es .
+
+ex:FrenchGuiana     rdf:type ex:Country ;
+                    ex:location ex:SouthAmerica ;
+                    ex:name "French Guiana"@en ;
+                    ex:name "Guayana Francesa"@es .
+
+ex:Guyna           rdf:type ex:Country ;
+                    ex:location ex:SouthAmerica ;
+                    ex:name "Guyana"@en ;
+                    ex:name "Guyana"@es .
+
+ex:Brazil           rdf:type ex:Country ;
+                    ex:location ex:SouthAmerica ;
+                    ex:name "Brasil"@es ;
+                    ex:name "Brazil"@en .
+
+ex:UN               rdf:type ex:Organization ;
+                    ex:name "United Nations"@en ;
+                    ex:name "Organización de las Naciones Unidas"@es .
+
+ex:Paramarimbo      rdf:type ex:City ;
+                    ex:name "Paramarimbo"@es .
+
+ex:NL               rdf:type ex:Language ;
+                    ex:name "Neerlandés"@es ;
+                    ex:name "Dutch"@en .

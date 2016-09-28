@@ -1,0 +1,66 @@
+@prefix : <http://users.dcc.uchile.cl/~dhernand/cursos/2016/web-datos/lab-03/datos.ttl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+# Los siguientes datos indican las clases de algunos individuos.
+
+:Claudio a :FullProfessor .
+:Jorge a :FullProfessor .
+:Aidan a :AssistantProfessor .
+:Daniel a :PostgradStudent .
+:Jaime a :UndergradStudent .
+
+# Los siguientes datos indican los roles de los integrantes de
+# este curso (el código de pregrado).
+
+:Aidan :professorOf :CC6202 .
+:Daniel :auxiliarOf :CC6202 .
+:Jaime :ayudanteOf :CC6202 .
+
+:Agustin :studentOf :CC6202 .
+:Braulio :studentOf :CC6202 .
+:Camilo :studentOf :CC6202 .
+:DiegoM :studentOf :CC6202 .
+:DiegoS :studentOf :CC6202 .
+:Enzo :studentOf :CC6202 .
+:Fabian :studentOf :CC6202 .
+:Felipe :studentOf :CC6202 .
+:Francisco :studentOf :CC6202 .
+:Gonzalo :studentOf :CC6202 .
+:Ignacio :studentOf :CC6202 .
+:JaimeI :studentOf :CC6202 .
+:Jorge :studentOf :CC6202 .
+:JuanJ :studentOf :CC6202 .
+:JuanP :studentOf :CC6202 .
+:Manuel :studentOf :CC6202 .
+:Maximiliano :studentOf :CC6202 .
+:Michel :studentOf :CC6202 .
+:Ricardo :studentOf :CC6202 .
+:Simon :studentOf :CC6202 .
+:Tomas :studentOf :CC6202 .
+
+# Ejercicio 1
+:FullProfessor rdfs:subClassOf :Professor .
+:AssistantProfessor rdfs:subClassOf :Professor .
+:PostgradStudent rdfs:subClassOf :Student .
+:UndergradStudent rdfs:subClassOf :Student .
+:Student rdfs:subClassOf :Person .
+:Professor rdfs:subClassOf :Person .
+
+# Ejercicio 2
+:auxiliarOf rdfs:subPropertyOf :organizerOf .
+:ayudanteOf rdfs:subPropertyOf :organizerOf .
+:professorOf rdfs:subPropertyOf :organizerOf .
+
+# Ejercicio 3
+:professorOf rdfs:domain :Professor .
+:auxiliarOf rdfs:domain :Student .
+:ayudanteOf rdfs:domain :Student .
+:studentOf rdfs:domain :Student .
+
+# Ejercicio 4
+:auxiliarOf rdfs:range :Course .
+:ayudanteOf rdfs:range :Course .
+:professorOf rdfs:range :Course .
+:studentOf rdfs:range :Course .
+
+:CC6202 a :Course
