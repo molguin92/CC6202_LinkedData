@@ -1,0 +1,136 @@
+# P1
+PREFIX org: <http://www.w3.org/ns/org#>
+PREFIX people: <http://datosabiertos.cl/d/transparencia/Person/>
+SELECT ?apellidoPaterno
+FROM <http://datosabiertos.cl/dataset/transparencia>
+WHERE { ?person <http://datosabiertos.cl/v/apellidoPaterno> ?apellidoPaterno . }
+
+#P2
+PREFIX org: <http://www.w3.org/ns/org#>
+PREFIX people: <http://datosabiertos.cl/d/transparencia/Person/>
+SELECT DISTINCT ?apellidoPaterno
+FROM <http://datosabiertos.cl/dataset/transparencia>
+WHERE { ?person <http://datosabiertos.cl/v/apellidoPaterno> ?apellidoPaterno . }
+
+#P3
+PREFIX org: <http://www.w3.org/ns/org#>
+PREFIX people: <http://datosabiertos.cl/d/transparencia/Person/>
+SELECT ?nombres ?org
+FROM <http://datosabiertos.cl/dataset/transparencia>
+WHERE {
+    ?person <http://datosabiertos.cl/v/nombres> ?nombres .
+    ?person a ?person_class .
+    ?membership org:member ?person ;
+    org:organization ?organization .
+    ?organization foaf:name ?org .
+ }
+
+#P4
+PREFIX org: <http://www.w3.org/ns/org#>
+PREFIX people: <http://datosabiertos.cl/d/transparencia/Person/>
+SELECT ?nombres
+FROM <http://datosabiertos.cl/dataset/transparencia>
+WHERE {
+    ?person <http://datosabiertos.cl/v/nombres> ?nombres .
+    ?person a ?person_class .
+    ?membership org:member ?person ;
+    org:organization ?organization .
+    ?organization foaf:name ?org .
+    FILTER(?org = "Facultad de Ciencias Físicas y Matemáticas")
+}
+
+#P5
+PREFIX org: <http://www.w3.org/ns/org#>
+PREFIX people: <http://datosabiertos.cl/d/transparencia/Person/>
+SELECT ?nombres
+FROM <http://datosabiertos.cl/dataset/transparencia>
+WHERE {
+   ?person <http://datosabiertos.cl/v/nombres> ?nombres .
+   ?person a ?person_class .
+   ?membership org:member ?person .
+   ?role a org:Role ; <http://www.w3.org/2004/02/skos/core#prefLabel> ?o .
+   FILTER(REGEX(?o, "(Prof. Asociado|Prof. Asistente|Prof. Titular)", "i"))
+}
+
+#P6
+PREFIX org: <http://www.w3.org/ns/org#>
+PREFIX people: <http://datosabiertos.cl/d/transparencia/Person/>
+SELECT ?nombres ?cal
+FROM <http://datosabiertos.cl/dataset/transparencia>
+WHERE {
+    ?person <http://datosabiertos.cl/v/nombres> ?nombres .
+    ?membership org:member ?person ;
+    <http://datosabiertos.cl/v/calificacion> ?cal .
+ }
+
+#P7
+PREFIX org: <http://www.w3.org/ns/org#>
+PREFIX people: <http://datosabiertos.cl/d/transparencia/Person/>
+PREFIX prop: <http://datosabiertos.cl/v/>
+SELECT ?nombres ?lastn1 ?lastn2 ?salary
+FROM <http://datosabiertos.cl/dataset/transparencia>
+WHERE {
+    ?person prop:nombres ?nombres .
+    ?person prop:apellidoPaterno ?lastn1 .
+    ?person prop:apellidoMaterno ?lastn2 .
+    ?membership org:member ?person ;
+    prop:remuneracionBrutaMensual ?salary .
+ }
+ ORDER BY DESC(?salary)
+ LIMIT 100
+
+#P8
+PREFIX org: <http://www.w3.org/ns/org#>
+PREFIX people: <http://datosabiertos.cl/d/transparencia/Person/>
+PREFIX prop: <http://datosabiertos.cl/v/>
+SELECT ?nombres ?lastn1 ?lastn2 ?salary
+FROM <http://datosabiertos.cl/dataset/transparencia>
+WHERE {
+    ?person prop:nombres ?nombres .
+    ?person prop:apellidoPaterno ?lastn1 .
+    ?person prop:apellidoMaterno ?lastn2 .
+    ?membership org:member ?person ;
+    prop:remuneracionBrutaMensual ?salary .
+    FILTER(?salary >= 7000000)
+}
+ORDER BY DESC(?salary)
+
+#P9
+PREFIX org: <http://www.w3.org/ns/org#>
+PREFIX people: <http://datosabiertos.cl/d/transparencia/Person/>
+PREFIX prop: <http://datosabiertos.cl/v/>
+ASK
+FROM <http://datosabiertos.cl/dataset/transparencia>
+WHERE {
+   {
+      ?person prop:nombres ?nombres .
+      ?role a org:Role ; <http://www.w3.org/2004/02/skos/core#prefLabel> ?o .
+   }
+   FILTER(REGEX(?o, "(Prof. Asociado|Prof. Asistente|Prof. Titular)", "i")) .
+   {
+      ?membership org:member ?person ;
+      org:organization ?organization .
+      ?organization foaf:name ?org .
+   }
+   FILTER(?org = "Facultad de Ciencias Físicas y Matemáticas") .
+   {
+      ?membership org:member ?person ;
+      prop:calificacion ?cal .
+   }
+   FILTER(?cal != "Doctor")
+}
+
+#P10
+PREFIX org: <http://www.w3.org/ns/org#>
+PREFIX people: <http://datosabiertos.cl/d/transparencia/Person/>
+PREFIX prop: <http://datosabiertos.cl/v/>
+CONSTRUCT { ?person a prop:Gringo }
+FROM <http://datosabiertos.cl/dataset/transparencia>
+WHERE {
+   { ?person a ?person_class }
+   OPTIONAL
+   { ?person prop:apellidoMaterno ?ln . }
+   FILTER(!BOUND(?ln))
+}
+
+#P11

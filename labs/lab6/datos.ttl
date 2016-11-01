@@ -1,0 +1,143 @@
+@prefix : <http://users.dcc.uchile.cl/~dhernand/cursos/2026/web-datos/lab-03/datos.ttl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+
+# Los siguientes datos indican las clases de algunos individuos.
+
+:Claudio a :FullProfessor .
+:Jorge a :AssociateProfessor .
+:Aidan a :AssistantProfessor .
+:Daniel a :PostgradStudent .
+:Jaime a :UndergradStudent .
+
+# Los siguientes datos indican los roles de los integrantes de
+# este curso (el código de pregrado).
+
+:Aidan :professorOf :CC6202 .
+:Daniel :auxiliarOf :CC6202 .
+:Jaime :ayudanteOf :CC6202 .
+
+:Agustin :studentOf :CC6202 .
+:Braulio :studentOf :CC6202 .
+:Camilo :studentOf :CC6202 .
+:DiegoM :studentOf :CC6202 .
+:DiegoS :studentOf :CC6202 .
+:Enzo :studentOf :CC6202 .
+:Fabian :studentOf :CC6202 .
+:Felipe :studentOf :CC6202 .
+:Francisco :studentOf :CC6202 .
+:Gonzalo :studentOf :CC6202 .
+:Ignacio :studentOf :CC6202 .
+:JaimeI :studentOf :CC6202 .
+:JorgeA :studentOf :CC6202 .
+:JuanJ :studentOf :CC6202 .
+:JuanP :studentOf :CC6202 .
+:Manuel :studentOf :CC6202 .
+:Maximiliano :studentOf :CC6202 .
+:Michel :studentOf :CC6202 .
+:Ricardo :studentOf :CC6202 .
+:Simon :studentOf :CC6202 .
+:Tomas :studentOf :CC6202 .
+
+:Aidan :professorOf :CC71X .
+:Daniel :auxiliarOf :CC71X .
+:Jaime :ayudanteOf :CC71X .
+
+:Larry :studentOf :CC71X .
+:Marcos :studentOf :CC71X .
+:Victor :studentOf :CC71X .
+
+# Daniel es tiene como profesor guía a Claudio.
+
+:Daniel :hasAdvisor :Claudio .
+
+# El curso CC71X es similar al curso CC6202.
+
+:CC71X :similarCourse :CC6202 .
+
+:CC71X a :PostgradCourse .
+:CC6202 a :UndergradCourse .
+
+# El DCC es parte de la FCFM y la FCFM es parte de la Universidad
+# de Chile.
+
+:DCC :partOf :FCFM .
+:FCFM :partOf :UniversidadDeChile .
+
+# Los cursos CC71X y CC6202 son dictados en el DCC.
+
+:CC71X :isTaughtIn :DCC .
+:CC6202 :isTaughtIn :DCC .
+
+# Daniel ama sus cursos, las manzanas y las peras.
+:Daniel :loves :peras .
+:Daniel :loves :manzanas .
+:Daniel :loves :CC71X .
+:Daniel :loves :CC6202 .
+
+# Ejercicio 1
+:hasStudent owl:inverseOf :studentOf .
+:PostgradCourse rdfs:subClassOf
+    [ owl:allValuesFrom :PostgradStudent ; owl:onProperty :hasStudent ] .
+:UndergradCourse rdfs:subClassOf
+    [ owl:allValuesFrom :UndergradStudent ; owl:onProperty :hasStudent ] .
+
+# Ejercicio 2
+:Professor owl:equivalentClass
+    [ owl:unionOf ( :AssistantProfessor :AssociateProfessor :FullProfessor ) ] .
+
+:Course owl:equivalentClass
+    [ owl:unionOf ( :PostgradCourse :UndergradCourse ) ] .
+
+:Student owl:equivalentClass
+    [ owl:unionOf ( :PostgradStudent :UndergradStudent ) ] .
+
+:Professor owl:disjointWith
+    [ owl:unionOf ( :Student :Course )] .
+
+:Juanito a :Professor, :Course, :Student . #inconsistency
+
+# Ejercicio 3
+:advisorOf owl:inverseOf :hasAdvisor .
+:StressedProfessor owl:equivalentClass
+    [ owl:someValuesFrom :PostgradStudent ; owl:onProperty :advisorOf ] .
+:RelaxedProfessor owl:equivalentClass
+    [ owl:intersectionOf ( :Professor [ owl:complementOf :StressedProfessor ] ) ] .
+
+# Ejercicio 4
+:FCFMDept owl:equivalentClass
+    [ owl:oneOf ( :DCC :DII :DIM :DAS :DCM :DFI :DGF :GEO :CIV :MIN :DIE :DIMEC :DIQ ) ] .
+
+# Ejercicio 5
+:Professor rdfs:subClassOf
+    [ owl:hasSelf true ; owl:onProperty :loves ] .
+
+# Razonador no tiene reglas para el self...
+:Claudio :loves :Claudio .
+:Jorge :loves :Jorge .
+:Aidan :loves :Aidan .
+
+# Ejercicio 6
+#:Professor rdfs:subClassOf
+#    [ owl:maxCardinality 1 ; owl:onProperty :loves ] .
+#:Aidan :loves :CC6202 .
+# inconsistency
+# razonador intuye Aidan es un curso?
+
+# Ejercicio 7
+:Professor rdfs:subClassOf
+    [ owl:cardinality 0 ; owl:onProperty :likes ] .
+
+:Aidan :likes :CC71X .
+
+# Ejercicio 8
+:Course rdfs:subClassOf
+    [ owl:minCardinality 5 ; owl:onProperty :hasStudent ] .
+
+# Ejercicio 9
+:Student rdfs:subClassOf
+    [ owl:maxCardinality 1 ; owl:onProperty :loves ] .
+#Debiese deducirse que Daniel no es un Student, ya que ama mas de un curso.
