@@ -1,0 +1,137 @@
+#p1
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX org:  <http://www.w3.org/ns/org#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX prop: <http://datosabiertos.cl/v/>
+
+SELECT DISTINCT ?name ?dif
+FROM <http://datosabiertos.cl/dataset/transparencia>
+WHERE
+{
+    ?s foaf:name ?name .
+    ?rel org:member ?s ; prop:remuneracionBrutaMensual ?rm ;
+    prop:asignacionesEspeciales ?ae .
+    BIND(?rm-?ae AS ?dif)
+}
+ORDER BY DESC(?dif)
+LIMIT(100)
+
+#p2
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX org:  <http://www.w3.org/ns/org#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX prop: <http://datosabiertos.cl/v/>
+SELECT (COUNT(DISTINCT ?surname) as ?count)
+FROM <http://datosabiertos.cl/dataset/transparencia>
+WHERE
+{
+    ?p prop:apellidoPaterno ?surname .
+}
+
+
+#p3
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX org:  <http://www.w3.org/ns/org#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX prop: <http://datosabiertos.cl/v/>
+SELECT (COUNT(DISTINCT ?surname) as ?count)
+FROM <http://datosabiertos.cl/dataset/transparencia>
+WHERE
+{
+    { ?p prop:apellidoPaterno ?surname . }
+    UNION
+    { ?p prop:apellidoMaterno ?surname . }
+}
+
+
+#p4
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX org:  <http://www.w3.org/ns/org#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX prop: <http://datosabiertos.cl/v/>
+SELECT ?orgname (SUM(?rm) as ?sum) (AVG(?rm) as ?avg)
+FROM <http://datosabiertos.cl/dataset/transparencia>
+WHERE
+{
+    ?p a org:OrganizationalUnit .
+    ?p foaf:name ?orgname .
+    ?o org:organization ?p ; prop:remuneracionBrutaMensual ?rm .
+
+}
+GROUP BY ?orgname
+ORDER BY DESC(?sum)
+
+#p5
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX org:  <http://www.w3.org/ns/org#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX prop: <http://datosabiertos.cl/v/>
+SELECT ?orgname (SUM(?rm) as ?sum) (AVG(?rm) as ?avg)
+FROM <http://datosabiertos.cl/dataset/transparencia>
+WHERE
+{
+    ?p a org:OrganizationalUnit .
+    ?p foaf:name ?orgname .
+    ?o org:organization ?p ; prop:remuneracionBrutaMensual ?rm .
+
+}
+GROUP BY ?orgname
+ORDER BY DESC(?sum)
+HAVING((AVG(?rm) as ?avg) > 1500000)
+
+#p6
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX org:  <http://www.w3.org/ns/org#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX prop: <http://datosabiertos.cl/v/>
+SELECT ?orgname ?type (SUM(?rm) as ?sum) (AVG(?rm) as ?avg)
+FROM <http://datosabiertos.cl/dataset/transparencia>
+WHERE
+{
+    ?p a org:OrganizationalUnit .
+    ?p foaf:name ?orgname .
+    ?o org:organization ?p ; prop:remuneracionBrutaMensual ?rm .
+    ?o org:organization ?p ; prop:tipoDeContrato ?type .
+
+}
+GROUP BY ?orgname ?type
+ORDER BY DESC(?sum)
+
+
+#p7
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX org:  <http://www.w3.org/ns/org#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX prop: <http://datosabiertos.cl/v/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+SELECT ?orgname (SUM(?rm)/xsd:float(?tsum) as ?frac)
+FROM <http://datosabiertos.cl/dataset/transparencia>
+WHERE
+{
+    ?p a org:OrganizationalUnit .
+    ?p foaf:name ?orgname .
+    ?o org:organization ?p ; prop:remuneracionBrutaMensual ?rm .
+    {
+        SELECT (SUM(?rm) as ?tsum)
+        WHERE
+        {
+            ?o prop:remuneracionBrutaMensual ?rm .
+        }
+    }
+}
+GROUP BY ?orgnamev ?tsum
+ORDER BY DESC(?frac)
