@@ -1,0 +1,86 @@
+#p1
+LOAD <http://molguin92.github.io/foaf/molguin.ttl>
+
+#p2
+SELECT ?s ?p ?o
+FROM <http://molguin92.github.io/foaf/molguin.ttl>
+WHERE
+{
+    ?s ?p ?o .
+}
+
+#p3
+SELECT ?s ?p ?o
+WHERE
+{
+    GRAPH <http://molguin92.github.io/foaf/molguin.ttl> { ?s ?p ?o }.
+}
+
+#p4
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX molguin: <http://molguin92.github.io/foaf/molguin.ttl#>
+SELECT ?friend (COUNT(?o) AS ?count)
+FROM <http://molguin92.github.io/foaf/molguin.ttl>
+WHERE
+{
+    molguin:me foaf:knows ?friend .
+    GRAPH ?g { ?friend a foaf:Person ; ?p ?o . }
+}
+GROUP BY ?friend
+
+#p5
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX molguin: <http://molguin92.github.io/foaf/molguin.ttl#>
+INSERT
+{
+   GRAPH <http://molguin92.github.io/foaf/molguin.ttl> { molguin:me foaf:transitiveKnows ?friend . }
+}
+WHERE
+{
+    molguin:me foaf:knows+ ?friend .
+    MINUS { molguin:me foaf:knows ?friend . }
+
+}
+GROUP BY ?friend
+
+#p6
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX molguin: <http://molguin92.github.io/foaf/molguin.ttl#>
+INSERT
+{
+    GRAPH <http://molguin92.github.io/foaf/molguin.ttl> { molguin:me foaf:stranger ?p . }
+}
+WHERE
+{
+    ?p a foaf:Person .
+    ?p foaf:knows ?op . # to filter out transparency data
+    MINUS{ molguin:me foaf:transitiveKnows ?p . }
+    MINUS{ molguin:me foaf:knows ?p . }
+    FILTER(?p != molguin:me)
+}
+
+#p7
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX molguin: <http://molguin92.github.io/foaf/molguin.ttl#>
+INSERT
+{
+    GRAPH <http://molguin92.github.io/foaf/molguin.ttl> { ?p foaf:name ?name . }
+}
+WHERE
+{
+    molguin:me foaf:stranger ?p .
+    ?p foaf:name ?name .
+}
+
+#p8
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX molguin: <http://molguin92.github.io/foaf/molguin.ttl#>
+PREFIX wkdata: <http://www.wikidata.org/entity/>
+INSERT
+{
+    GRAPH <http://molguin92.github.io/foaf/molguin.ttl> { molguin:me foaf:lovesMovie wkdata:Q753899 . }
+    GRAPH <http://molguin92.github.io/foaf/molguin.ttl> { molguin:me foaf:lovesMovie wkdata:Q181795 . }
+    GRAPH <http://molguin92.github.io/foaf/molguin.ttl> { molguin:me foaf:lovesMovie wkdata:Q1388653 . }
+    GRAPH <http://molguin92.github.io/foaf/molguin.ttl> { molguin:me foaf:lovesMovie wkdata:Q1125384 . }
+    GRAPH <http://molguin92.github.io/foaf/molguin.ttl> { molguin:me foaf:lovesMovie wkdata:Q212041 . }
+}
