@@ -1,0 +1,96 @@
+@prefix ex:   <http://ex.org/> .
+@prefix rr:   <http://www.w3.org/ns/r2rml#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+<#CandidateMap>
+    rr:logicalTable [ rr:tableName "candidates" ] ;
+    rr:subjectMap [
+        rr:template "http://ex.org/candidate/{name}";
+	rr:termType rr:IRI ;
+        rr:class ex:Candidate ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate ex:name ;
+        rr:objectMap [ rr:column "name" ]
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate ex:party ;
+        rr:objectMap [ rr:column "party" ]
+    ] .
+
+<#StateMap>
+    rr:logicalTable [ rr:tableName "states" ] ;
+    rr:subjectMap [
+        rr:template "http://ex.org/state/{name}";
+	rr:termType rr:IRI ;
+        rr:class ex:State ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate ex:name ;
+        rr:objectMap [ rr:column "name" ]
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate ex:electoralVotes ;
+        rr:objectMap [ rr:column "electoral_votes"; rr:datatype xsd:integer ]
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate ex:pollClosedAt ;
+        rr:objectMap [ rr:column "poll_closed_at" ]
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate ex:numberOfCandidates ;
+        rr:objectMap [ rr:column "number_of_candidates"; rr:datatype xsd:integer ]
+    ] .
+
+<#CountyMap>
+    rr:logicalTable [ rr:tableName "votes" ] ;
+    rr:subjectMap [
+        rr:template "http://ex.org/county/{state}/{county}" ;
+        rr:termType rr:IRI ;
+        rr:class ex:County ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate ex:name ;
+        rr:objectMap [ rr:column "county" ]
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate ex:state ;
+        rr:objectMap [
+            rr:parentTriplesMap <#StateMap> ;
+            rr:joinCondition [
+                rr:child "state" ; rr:parent "name"
+            ]
+        ]
+    ] .
+
+<#VotesMap>
+    rr:logicalTable [ rr:tableName "votes" ] ;
+    rr:subjectMap [
+            rr:template "http://ex.org/votes/{candidate}/{state}/{county}";
+            rr:termType rr:IRI ;
+            rr:class ex:Votes ;
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate ex:candidate ;
+        rr:objectMap [
+            rr:parentTriplesMap <#CandidateMap> ;
+            rr:joinCondition [
+                rr:child "candidate" ; rr:parent "name"
+            ]
+        ]
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate ex:county ;
+        rr:objectMap [
+            rr:parentTriplesMap <#CountyMap> ;
+            rr:joinCondition [
+                rr:child "county" ; rr:parent "county"
+            ]
+        ]
+    ] ;
+    rr:predicateObjectMap [
+        rr:predicate ex:numberOfVotes ;
+        rr:objectMap [ rr:column "number_of_votes"; rr:datatype xsd:integer ]
+    ] .

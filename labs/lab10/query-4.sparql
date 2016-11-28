@@ -1,0 +1,26 @@
+PREFIX ex:   <http://ex.org/>
+SELECT
+   ?CandidateName
+   (SUM(?numberOfVotes) AS ?TotalVotes)
+WHERE {
+    ?candidate a ex:Candidate ;
+        ex:name ?CandidateName ;
+        ex:party ?PartyName .
+
+    ?votes a ex:Votes ;
+        ex:candidate ?candidate ;
+        ex:county ?county ;
+        ex:numberOfVotes ?NumberOfVotes .
+
+    ?county a ex:County ;
+        ex:name ?CountyName ;
+        ex:state ?state .
+
+    ?state a ex:State ;
+        ex:name ?StateName ;
+        ex:electoralVotes ?ElectoralVotes ;
+        ex:pollClosedAt ?PollClosedAt ;
+        ex:numberOfCandidates ?NumberOfCandidates .
+}
+GROUP BY ?CandidateName
+LIMIT 10

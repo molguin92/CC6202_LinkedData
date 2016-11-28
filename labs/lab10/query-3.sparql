@@ -1,0 +1,32 @@
+PREFIX ex:   <http://ex.org/>
+SELECT DISTINCT
+   ?CandidateName
+   ?PartyName
+   ?StateName
+   ?ElectoralVotes
+   ?PollClosedAt
+   ?NumberOfCandidates
+   ?CountyName
+   ?NumberOfVotes
+WHERE {
+    ?candidate a ex:Candidate ;
+        ex:name ?CandidateName ;
+        ex:party ?PartyName .
+
+    ?votes a ex:Votes ;
+        ex:candidate ?candidate ;
+        ex:county ?county ;
+        ex:numberOfVotes ?NumberOfVotes .
+
+    ?county a ex:County ;
+        ex:name ?CountyName ;
+        ex:state ?state .
+
+    ?state a ex:State ;
+        ex:name ?StateName ;
+        ex:electoralVotes ?ElectoralVotes ;
+        ex:pollClosedAt ?PollClosedAt ;
+        ex:numberOfCandidates ?NumberOfCandidates .
+}
+ORDER BY ?StateName ?CountyName ?PartyName
+LIMIT 10

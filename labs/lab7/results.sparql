@@ -134,3 +134,12 @@ WHERE {
 }
 
 #P11
+PREFIX org: <http://www.w3.org/ns/org#>
+PREFIX people: <http://datosabiertos.cl/d/transparencia/Person/>
+SELECT DISTINCT ?apellidoPaterno, (COUNT(*) as ?c)
+FROM <http://datosabiertos.cl/dataset/transparencia>
+WHERE { 
+	?person <http://datosabiertos.cl/v/apellidoPaterno> ?apellidoPaterno . 
+}
+GROUP BY ?apellidoPaterno
+ORDER BY DESC(?c)
