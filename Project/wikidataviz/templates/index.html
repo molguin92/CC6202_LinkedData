@@ -55,13 +55,20 @@
     .attr('class', 'd3-tip')
     .offset([-10, 0])
     .html(function (d) {
-        return "<span style='color:red'>" + d.id + "</span>";
-    })
+
+{#        var xmlHttp = new XMLHttpRequest();#}
+{#        xmlHttp.open("GET", '/info?url=' + d.id, false); // false for synchronous request#}
+{#        xmlHttp.send(null);#}
+{#        var name = xmlHttp.responseText;#}
+
+
+        return "<span style='color:red'>" + d.label + "</span>";
+    });
 
     var qid = "{{ data|safe }}";
 
-    var width  = window.innerWidth,
-        height = window.innerHeight;
+    var width  = window.innerWidth * 0.8,
+        height = window.innerHeight * 0.8;
 
     var svg = d3.select("body").append("svg")
     .attr("width", width)
@@ -97,7 +104,10 @@
         node.append("circle")
         .attr("r", "5")
         .on('mouseover', tip.show)
-        .on('mouseout', tip.hide);
+        .on('mouseout', tip.hide)
+        .on('click', function (d) {
+            window.open(d.id);
+        });
 
         {#        node.append("text")#}
         {#        .attr("dx", 12)#}
