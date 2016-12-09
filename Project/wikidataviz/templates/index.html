@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <script src="http://d3js.org/d3.v2.min.js?2.9.3"></script>
+<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
 <style>
 
     .link {
@@ -18,9 +19,44 @@
         fill: #555;
     }
 
+    .d3-tip {
+        line-height: 1;
+        font-weight: bold;
+        padding: 12px;
+        background: rgba(0, 0, 0, 0.8);
+        color: #fff;
+        border-radius: 2px;
+    }
+
+    /* Creates a small triangle extender for the tooltip */
+    .d3-tip:after {
+        box-sizing: border-box;
+        display: inline;
+        font-size: 10px;
+        width: 100%;
+        line-height: 1;
+        color: rgba(0, 0, 0, 0.8);
+        content: "\25BC";
+        position: absolute;
+        text-align: center;
+    }
+
+    /* Style northward tooltips differently */
+    .d3-tip.n:after {
+        margin: -1px 0 0 0;
+        top: 100%;
+        left: 0;
+    }
+
 </style>
 <body>
 <script>
+    var tip = d3.tip()
+    .attr('class', 'd3-tip')
+    .offset([-10, 0])
+    .html(function (d) {
+        return "<span style='color:red'>" + d.id + "</span>";
+    })
 
     var qid = "{{ data|safe }}";
 
@@ -37,6 +73,9 @@
     .charge(-100)
     .size([width, height]);
 
+
+    svg.call(tip);
+
     d3.json("/entity?id=" + qid, function (json) {
         force
         .nodes(json.nodes)
@@ -47,7 +86,7 @@
         .data(json.links)
         .enter().append("line")
         .attr("class", "link")
-        .style("stroke-width", function (d) { return Math.sqrt(d.weight); });
+        .style("stroke-width", 2);
 
         var node = svg.selectAll(".node")
         .data(json.nodes)
@@ -56,12 +95,14 @@
         .call(force.drag);
 
         node.append("circle")
-        .attr("r", "5");
+        .attr("r", "5")
+        .on('mouseover', tip.show)
+        .on('mouseout', tip.hide);
 
-{#        node.append("text")#}
-{#        .attr("dx", 12)#}
-{#        .attr("dy", ".35em")#}
-{#        .text(function (d) { return d.name });#}
+        {#        node.append("text")#}
+        {#        .attr("dx", 12)#}
+        {#        .attr("dy", ".35em")#}
+        {#        .text(function (d) { return d.name });#}
 
         force.on("tick", function () {
             link.attr("x1", function (d) { return d.source.x; })
